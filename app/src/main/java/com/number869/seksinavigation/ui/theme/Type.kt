@@ -1,4 +1,4 @@
-package com.dotstealab.seksinavigation.ui.theme
+package com.number869.seksinavigation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

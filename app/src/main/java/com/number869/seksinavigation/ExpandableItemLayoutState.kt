@@ -1,4 +1,4 @@
-package com.dotstealab.seksinavigation
+package com.number869.seksinavigation
 
 import android.service.controls.ControlsProviderService.TAG
 import android.util.Log

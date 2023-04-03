@@ -1,4 +1,4 @@
-package com.dotstealab.seksinavigation
+package com.number869.seksinavigation
 
 import android.window.BackEvent
 import android.window.OnBackAnimationCallback

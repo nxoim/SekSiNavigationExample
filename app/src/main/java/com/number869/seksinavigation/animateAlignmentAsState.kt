@@ -1,4 +1,4 @@
-package com.dotstealab.seksinavigation
+package com.number869.seksinavigation
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
@@ -39,7 +39,7 @@ private class BoxChildData(
 
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
-		val otherModifier = other as? com.dotstealab.seksinavigation.BoxChildData ?: return false
+		val otherModifier = other as? com.number869.seksinavigation.BoxChildData ?: return false
 
 		return alignment == otherModifier.alignment &&
 				matchParentSize == otherModifier.matchParentSize

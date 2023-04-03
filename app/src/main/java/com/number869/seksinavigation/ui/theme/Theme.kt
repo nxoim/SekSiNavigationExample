@@ -1,4 +1,4 @@
-package com.dotstealab.seksinavigation.ui.theme
+package com.number869.seksinavigation.ui.theme
 
 import android.app.Activity
 import android.os.Build

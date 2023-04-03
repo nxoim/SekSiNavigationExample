@@ -1,4 +1,4 @@
-package com.dotstealab.seksinavigation
+package com.number869.seksinavigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable

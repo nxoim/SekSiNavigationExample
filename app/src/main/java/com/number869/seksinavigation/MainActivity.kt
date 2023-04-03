@@ -1,4 +1,4 @@
-package com.dotstealab.seksinavigation
+package com.number869.seksinavigation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,7 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dotstealab.seksinavigation.ui.theme.SekSiNavigationTheme
+import com.number869.seksinavigation.ui.theme.SekSiNavigationTheme
 
 
 class MainActivity : ComponentActivity() {

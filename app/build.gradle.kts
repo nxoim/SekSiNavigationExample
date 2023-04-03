@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-	namespace = "com.dotstealab.seksinavigation"
+	namespace = "com.number869.seksinavigation"
 	compileSdkPreview = "UpsideDownCake"
 
 	defaultConfig {
-		applicationId = "com.dotstealab.seksinavigation"
+		applicationId = "com.number869.seksinavigation"
 		minSdkPreview = "UpsideDownCake"
 		targetSdkPreview = "UpsideDownCake"
 		versionCode = 1
