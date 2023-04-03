@@ -55,7 +55,7 @@ fun ExpandableWrapper(
 //	}
 
 	// pass the overlay originalBounds and position to the state and update the item
-	if (!isOverlaying)  LaunchedEffect(updatedBounds) {
+	LaunchedEffect(updatedBounds) {
 		state.setBounds(key.toString(), updatedBounds)
 	}
 }

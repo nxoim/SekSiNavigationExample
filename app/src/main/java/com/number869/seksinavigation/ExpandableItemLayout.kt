@@ -22,9 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -80,7 +80,7 @@ fun ExpandableItemLayout(
 	)
 
 	val baseUiScrimFraction = if (isOverlaying)
-		state.itemsState[state.overlayStack.last()]?.sizeAgainstOriginalAnimationProgress?.combinedProgress ?: 0f
+		state.itemsState[state.overlayStack.lastOrNull()]?.sizeAgainstOriginalAnimationProgress?.combinedProgress ?: 0f
 	else
 		0f
 
@@ -95,10 +95,13 @@ fun ExpandableItemLayout(
 		Box(
 			Modifier
 				.drawWithContent {
-				drawContent()
-				drawRect(baseUiScrimColor)
-			}
-				.scale(scale = (1f - baseUiScrimFraction) + (0.9f * baseUiScrimFraction))
+					drawContent()
+					drawRect(baseUiScrimColor)
+				}
+				.graphicsLayer {
+					scaleX = (1f - baseUiScrimFraction) + (0.9f * baseUiScrimFraction)
+					scaleY = (1f - baseUiScrimFraction) + (0.9f * baseUiScrimFraction)
+				}
 		) {
 			nonOverlayContent()
 		}
@@ -136,7 +139,7 @@ fun ExpandableItemLayout(
 			// hardcoding a number
 			val onSwipeSizeChangeExtent = 0.15f
 			val onSwipeOffsetXChangeExtent = 0.1f
-			val onSwipeOffsetYChangeExtent = 0.02f
+			val onSwipeOffsetYChangeExtent = 0.1f
 			val onSwipeOffsetYPrevalence = backGestureProgress * 1f
 			// the higher the number above is - the earlier the gesture will
 			// fully depend the vertical swipe offset
@@ -150,24 +153,28 @@ fun ExpandableItemLayout(
 			var useGestureValues by remember { mutableStateOf(false) }
 
 			// all these calculations to tune the animation
-			val sizeExpandedWithSwipeProgress = IntSize(
-				(state.screenSize.width * (1f - backGestureProgress * onSwipeSizeChangeExtent)).toInt(),
-				(state.screenSize.height * (1f - backGestureProgress * onSwipeSizeChangeExtent)).toInt()
-			)
+			val sizeExpandedWithSwipeProgress: () -> IntSize = {
+				IntSize(
+					(state.screenSize.width * (1f - backGestureProgress * onSwipeSizeChangeExtent)).toInt(),
+					(state.screenSize.height * (1f - backGestureProgress * onSwipeSizeChangeExtent)).toInt()
+				)
+			}
 
-			val offsetExpandedWithSwipeProgress = Offset(
-				if (backGestureSwipeEdge == 0)
+			val offsetExpandedWithSwipeProgress: () -> Offset = {
+				Offset(
+					if (backGestureSwipeEdge == 0)
 					// if swipe is from the left side
-					((state.screenSize.width * onSwipeOffsetXChangeExtent) * backGestureProgress)
-				else
+						((state.screenSize.width * onSwipeOffsetXChangeExtent) * backGestureProgress)
+					else
 					// if swipe is from the right side
-					(-(state.screenSize.width * onSwipeOffsetXChangeExtent) * backGestureProgress),
-				(backGestureOffset.y * onSwipeOffsetYChangeExtent) * onSwipeOffsetYPrevalence
-			)
+						(-(state.screenSize.width * onSwipeOffsetXChangeExtent) * backGestureProgress),
+					((backGestureOffset.y + (-state.screenSize.height * backGestureProgress * 2)) * onSwipeOffsetYChangeExtent) * onSwipeOffsetYPrevalence
+				)
+			}
 
 			val animatedSize by animateIntSizeAsState(
 				if (isExpanded || useGestureValues) {
-					sizeExpandedWithSwipeProgress
+					sizeExpandedWithSwipeProgress()
 				} else {
 					originalSize
 				},
@@ -176,7 +183,7 @@ fun ExpandableItemLayout(
 			)
 
 			val animatedOffset by animateOffsetAsState(
-				if (isExpanded) offsetExpandedWithSwipeProgress else originalOffset,
+				if (isExpanded) offsetExpandedWithSwipeProgress() else originalOffset,
 				spring(if (isExpanded) 0.95f else 0.7f, 350f),
 				label = ""
 			)
@@ -186,23 +193,27 @@ fun ExpandableItemLayout(
 				spring(if (isExpanded) 0.95f else 0.7f, 350f)
 			)
 
-			val processedOffset = if (useGestureValues) IntOffset(
-				offsetExpandedWithSwipeProgress.x.roundToInt(),
-				offsetExpandedWithSwipeProgress.y.roundToInt()
-			) else
-				IntOffset(
-					animatedOffset.x.roundToInt(),
-					animatedOffset.y.roundToInt()
-				)
+			val processedOffset: () -> IntOffset = {
+				if (useGestureValues) IntOffset(
+					offsetExpandedWithSwipeProgress().x.roundToInt(),
+					offsetExpandedWithSwipeProgress().y.roundToInt()
+				) else
+					IntOffset(
+						animatedOffset.x.roundToInt(),
+						animatedOffset.y.roundToInt()
+					)
+			}
 
-			val processedSize = if (useGestureValues) DpSize(
-				sizeExpandedWithSwipeProgress.width.dp,
-				sizeExpandedWithSwipeProgress.height.dp
-			) else
-				DpSize(
-					animatedSize.width.dp,
-					animatedSize.height.dp
-				)
+			val processedSize: () -> DpSize = {
+				if (useGestureValues) DpSize(
+					sizeExpandedWithSwipeProgress().width.dp,
+					sizeExpandedWithSwipeProgress().height.dp
+				) else
+					DpSize(
+						animatedSize.width.dp,
+						animatedSize.height.dp
+					)
+			}
 
 			LaunchedEffect(animatedOffset) {
 				animationProgress = -(overlayBounds.top - itemState.originalBounds.top) / (itemState.originalBounds.top - Rect.Zero.top)
@@ -243,8 +254,8 @@ fun ExpandableItemLayout(
 
 			// i dont remember why i thought this was needed
 			LaunchedEffect(animatedSize) {
-				val widthForOriginalProgressCalculation = (processedSize.width.value - originalSize.width) / (state.screenSize.width - originalSize.width)
-				val heightForOriginalProgressCalculation = (processedSize.height.value - originalSize.height) / (state.screenSize.height - originalSize.height)
+				val widthForOriginalProgressCalculation = (processedSize().width.value - originalSize.width) / (state.screenSize.width - originalSize.width)
+				val heightForOriginalProgressCalculation = (processedSize().height.value - originalSize.height) / (state.screenSize.height - originalSize.height)
 
 				state.setSizeAgainstOriginalProgress(
 					key,
@@ -268,15 +279,18 @@ fun ExpandableItemLayout(
 			if (itemState.isOverlaying) {
 				Box(
 					Modifier
-						.offset { processedOffset }
-						.size(processedSize)
+						.offset { processedOffset() }
+						.size(processedSize())
 						.align(animatedAlignment)
 						.onGloballyPositioned { overlayBounds = it.boundsInWindow() }
 						.drawWithContent {
 							drawContent()
 							drawRect(overlayScrim)
 						}
-						.scale(scale = if (state.overlayStack.last() != key) (1f - lastOverlayScrimFraction * 0.1f)  else 1f)
+						.graphicsLayer{
+							scaleX = if (state.overlayStack.lastOrNull() != key) (1f - lastOverlayScrimFraction * 0.1f)  else 1f
+							scaleY = if (state.overlayStack.lastOrNull() != key) (1f - lastOverlayScrimFraction * 0.1f)  else 1f
+						}
 				) {
 					// display content
 					// TODO fix color scheme default colors not being applied
