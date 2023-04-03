@@ -33,73 +33,68 @@ class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContent {
-			val state = rememberExpandableItemLayoutState(
-//				screenSize = IntSize(
-//					LocalConfiguration.current.screenWidthDp,
-//					(LocalConfiguration.current.screenHeightDp.dp
-//							+ WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
-//							+ WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
-//					).value.toInt()
-//				)
-			)
+			val state = rememberExpandableItemLayoutState()
 			SekSiNavigationTheme {
-				ExpandableItemLayout(state, onBackInvokedDispatcher) {
-					Scaffold(
-						topBar = {
-							CenterAlignedTopAppBar(
-								title = { Text(text = "Sek Si Navigation Demo") } ,
-								windowInsets = WindowInsets.statusBars
-							)
-						},
-						bottomBar = {
-							NavigationBar(windowInsets = WindowInsets.navigationBars) {
-								NavigationBarItem(
-									selected = true,
-									onClick = { /*TODO*/ },
-									icon = {
-										Icon(Icons.Default.Home, contentDescription = "")
-									},
-									label = {
-										Text(text = "Home")
-									}
+				Surface {
+					// TODO fix overlay not blocking clicks behind it
+					ExpandableItemLayout(state, onBackInvokedDispatcher) {
+						Scaffold(
+							topBar = {
+								CenterAlignedTopAppBar(
+									title = { Text(text = "Sek Si Navigation Demo") } ,
+									windowInsets = WindowInsets.statusBars
 								)
-								NavigationBarItem(
-									selected = false,
-									onClick = { /*TODO*/ },
-									icon = {
-										Icon(Icons.Default.FavoriteBorder, contentDescription = "")
-									},
-									label = {
-										Text(text = "Favourites")
-									}
-								)
+							},
+							bottomBar = {
+								NavigationBar(windowInsets = WindowInsets.navigationBars) {
+									NavigationBarItem(
+										selected = true,
+										onClick = { /*TODO*/ },
+										icon = {
+											Icon(Icons.Default.Home, contentDescription = "")
+										},
+										label = {
+											Text(text = "Home")
+										}
+									)
+									NavigationBarItem(
+										selected = false,
+										onClick = { /*TODO*/ },
+										icon = {
+											Icon(Icons.Default.FavoriteBorder, contentDescription = "")
+										},
+										label = {
+											Text(text = "Favourites")
+										}
+									)
+								}
 							}
-						}
-					) { scaffoldPadding ->
-						Surface(Modifier.padding(scaffoldPadding)) {
-							LazyColumn(
-								contentPadding = PaddingValues(horizontal = 16.dp),
-								verticalArrangement = Arrangement.spacedBy(8.dp)
-							) {
-								repeat(100) {
-									item {
-										val key = it.toString()
-										// TODO SIZE
-										// in case your thing is fully dynamic - define preferred
-										// originalBounds by giving the wrapper a originalBounds (its a parameter),
-										// and giving the content fillMaxSize
+						) { scaffoldPadding ->
+							Surface(Modifier.padding(scaffoldPadding)) {
+								LazyColumn(
+									contentPadding = PaddingValues(horizontal = 16.dp),
+									verticalArrangement = Arrangement.spacedBy(8.dp)
+								) {
+									repeat(100) {
+										item {
+											val key = it.toString()
+											// TODO SIZE
+											// in case your thing is fully dynamic - define preferred
+											// originalBounds by giving the wrapper a originalBounds (its a parameter),
+											// and giving the content fillMaxSize
 
-										// in case you are doing some sort of transition
-										// between 2 screens - give the sizes to the
-										// content itself
-										ExpandableWrapper(
-											Modifier
-												.height(258.dp)
-												.fillMaxWidth(),
-											key = key,
-											state = state
-										) {
-											UmWhateverThing(state, key)
+											// in case you are doing some sort of transition
+											// between 2 screens - give the sizes to the
+											// content itself
+											ExpandableWrapper(
+												Modifier
+													.height(64.dp)
+													.fillMaxWidth(),
+												key = key,
+												state = state
+											) {
+												UmWhateverExampleIdk(state, key)
+											}
 										}
 									}
 								}

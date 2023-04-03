@@ -1,30 +1,44 @@
 package com.dotstealab.seksinavigation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun UmWhateverThing(state: ExpandableItemsState, key: Any) {
-	val originalSize = state.itemsState[key]?.originalBounds
+fun UmWhateverExampleIdk(state: ExpandableItemsState, key: Any) {
+	val isExpanded = state.itemsState[key]?.isExpanded ?: false
+	val animationProgress = state.itemsState[key]?.sizeAgainstOriginalAnimationProgress?.combinedProgress ?: 0f
 
 	Box(
 		Modifier
@@ -35,97 +49,71 @@ fun UmWhateverThing(state: ExpandableItemsState, key: Any) {
 				else
 					it.clickable { state.addToOverlayStack(key) }
 			}
-			.background(MaterialTheme.colorScheme.secondaryContainer)
+			.background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp))
 	) {
-		Column(Modifier.padding(20.dp)) {
+		Column() {
 			val animatedStatusbarPadding by animateDpAsState(
-				if (state.itemsState[key]?.isExpanded ?: false)
-					WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-				else 0.dp, label = ""
+				WindowInsets.statusBars.asPaddingValues().calculateTopPadding() * animationProgress,
+				label = ""
 			)
 
 			Spacer(modifier = Modifier.height(animatedStatusbarPadding))
-			Icon(Icons.Default.AccountCircle, contentDescription = "")
-//			Text(text = state.itemsState[key].animationProgress)
-			Spacer(modifier = Modifier.height(30.dp))
 
-			val uuid = "$key $key"
-			ExpandableWrapper(
-				modifier = Modifier
-					.let {
-						if (state.itemsState[uuid]?.isExpanded == true)
-							it
-						else
-							it.clickable { state.addToOverlayStack(uuid) }
-					}
-					.size(150.dp),
-				key = uuid,
-				state = state
+			Row(
+				Modifier
+					.height(64.dp)
+					.fillMaxWidth(),
+				verticalAlignment = Alignment.CenterVertically
 			) {
 				Box(
-					modifier = Modifier
-						.fillMaxSize()
-						.background(MaterialTheme.colorScheme.primary)
+					Modifier
+						.weight(1f, false)
+						.padding(8.dp)
+						.clip(CircleShape)
+						.aspectRatio(1f)
+						.background(MaterialTheme.colorScheme.secondaryContainer),
+					contentAlignment = Alignment.Center
 				) {
-					val sjjsj = "$key $key $key"
+					Icon(
+						Icons.Default.Person,
+						contentDescription = "",
+						tint = MaterialTheme.colorScheme.onSecondaryContainer,
+						modifier = Modifier.size(24.dp)
+					)
+				}
+				
+				Text(
+					text = "a what? bruh?",
+					style = MaterialTheme.typography.headlineSmall,
+					color = MaterialTheme.colorScheme.onSurface
+				)
+			}
 
-					Column {
-						val animatedStatusbarPadding by animateDpAsState(
-							if (state.itemsState[uuid]?.isExpanded ?: false)
-								WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-							else 0.dp, label = ""
-						)
+			AnimatedVisibility(visible = isExpanded) {
+				LazyVerticalGrid(
+					columns = GridCells.Fixed(2),
+					contentPadding = PaddingValues(16.dp),
+					verticalArrangement = Arrangement.spacedBy(16.dp),
+					horizontalArrangement = Arrangement.spacedBy(16.dp)
+				){
+					repeat(100) {
+						val bruh = "$it 738" // yes
 
-						Spacer(modifier = Modifier.height(animatedStatusbarPadding))
-
-						Box {
+						item {
 							ExpandableWrapper(
-								modifier = Modifier
-									.let {
-										if (state.itemsState[sjjsj]?.isExpanded == true)
-											it
-										else
-											it.clickable { state.addToOverlayStack(sjjsj) }
-									}
-									.size(100.dp),
-								key = sjjsj,
+								Modifier
+									.height(128.dp)
+									.fillMaxWidth()
+									.clickable { state.addToOverlayStack(bruh) },
+								key = bruh,
 								state = state
 							) {
-								Box(
-									modifier = Modifier
+								Column(
+									Modifier
 										.fillMaxSize()
 										.background(MaterialTheme.colorScheme.tertiaryContainer)
 								) {
-									val bruh = "$key $key $key $key"
 
-									Column {
-										val animatedStatusbarPadding by animateDpAsState(
-											if (state.itemsState[sjjsj]?.isExpanded ?: false)
-												WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-											else 0.dp, label = ""
-										)
-
-										Spacer(modifier = Modifier.height(animatedStatusbarPadding))
-
-										ExpandableWrapper(
-											modifier = Modifier
-												.let {
-													if (state.itemsState[bruh]?.isExpanded == true)
-														it
-													else
-														it.clickable { state.addToOverlayStack(bruh) }
-												}
-												.size(50.dp),
-											key = bruh,
-											state = state
-										) {
-											Box(modifier = Modifier
-												.fillMaxSize()
-												.background(MaterialTheme.colorScheme.secondaryContainer)) {
-
-											}
-										}
-									}
 								}
 							}
 						}

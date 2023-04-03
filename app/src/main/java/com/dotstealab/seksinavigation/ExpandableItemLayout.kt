@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.boundsInWindow
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 
@@ -91,10 +93,12 @@ fun ExpandableItemLayout(
 		// display content behind the overla
 		// TODO wrap in a box and apply scrim
 		Box(
-			Modifier.drawWithContent {
+			Modifier
+				.drawWithContent {
 				drawContent()
 				drawRect(baseUiScrimColor)
 			}
+				.scale(scale = (1f - baseUiScrimFraction) + (0.9f * baseUiScrimFraction))
 		) {
 			nonOverlayContent()
 		}
@@ -212,7 +216,7 @@ fun ExpandableItemLayout(
 					// decide that the animation is done
 					// because it might cross the actual position before
 					// the spring animation is done
-					delay(5)
+					delay(10)
 					isAnimating = false
 				}
 
@@ -245,18 +249,20 @@ fun ExpandableItemLayout(
 				state.setSizeAgainstOriginalProgress(
 					key,
 					SizeAgainstOriginalAnimationProgress(
-						widthForOriginalProgressCalculation,
-						heightForOriginalProgressCalculation,
-						(widthForOriginalProgressCalculation + heightForOriginalProgressCalculation) / 2
+						max(widthForOriginalProgressCalculation, 0f),
+						max(heightForOriginalProgressCalculation, 0f),
+						max((widthForOriginalProgressCalculation + heightForOriginalProgressCalculation) / 2, 0f)
 					)
 				)
 			}
 
+			val lastOverlayScrimFraction = state.itemsState[state.overlayStack.last()]?.sizeAgainstOriginalAnimationProgress?.combinedProgress ?: 0f
 			val overlayScrim by animateColorAsState(
 				MaterialTheme.colorScheme.scrim.copy(
 					if (isOverlayAboveOtherOverlays)
-						0f else
-							0.2f * (state.itemsState[state.overlayStack.last()]?.sizeAgainstOriginalAnimationProgress?.combinedProgress ?: 0f)
+						0f
+					else
+						0.2f * (lastOverlayScrimFraction)
 				), label = ""
 			)
 			if (itemState.isOverlaying) {
@@ -270,8 +276,11 @@ fun ExpandableItemLayout(
 							drawContent()
 							drawRect(overlayScrim)
 						}
+						.scale(scale = if (state.overlayStack.last() != key) (1f - lastOverlayScrimFraction * 0.1f)  else 1f)
 				) {
 					// display content
+					// TODO fix color scheme default colors not being applied
+					// on text and icons
 					state.getContent(key)()
 				}
 			}
