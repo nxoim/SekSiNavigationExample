@@ -36,12 +36,20 @@ fun ExpandableWrapper(
 		updatedBounds,
 		content
 	)
+
+	// TODO fix scale fraction
+//	val widthScaleFraction = state.screenSize.width.toFloat() / updatedBounds.width
+//	val heightScaleFraction = state.screenSize.height.toFloat() / updatedBounds.height
+//
+//	if (state.itemsState[key]?.scaleFraction!!.byWidth == 0f) {
+//		state.setScaleFraction(
+//			key.toString(),
+//			ScaleFraction(widthScaleFraction, heightScaleFraction)
+//		)
+//	}
+
 	// pass the overlay originalBounds and position to the state and update the item
 	LaunchedEffect(updatedBounds) {
 		state.setBounds(key.toString(), updatedBounds)
-
-		val scaleFraction = state.screenSize.width / updatedBounds.width
-
-		state.setScaleFraction(key.toString(), scaleFraction)
 	}
 }

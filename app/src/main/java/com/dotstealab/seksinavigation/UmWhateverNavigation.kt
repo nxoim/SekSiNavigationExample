@@ -17,28 +17,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun UmWhateverThing(state: ExpandableItemsState, key: Any) {
 	val originalSize = state.itemsState[key]?.originalBounds
-	var currentSize by remember { mutableStateOf(IntSize.Zero) }
-
-	val scaleFraction = state.itemsState[key]?.scaleFraction ?: 0f
 
 	Box(
 		Modifier
 			.fillMaxSize()
-			.onSizeChanged { currentSize = it }
 			.let {
 				if (state.itemsState[key]?.isExpanded == true)
 					it
@@ -68,7 +58,7 @@ fun UmWhateverThing(state: ExpandableItemsState, key: Any) {
 						else
 							it.clickable { state.addToOverlayStack(uuid) }
 					}
-					.size((150 * scaleFraction).dp),
+					.size(150.dp),
 				key = uuid,
 				state = state
 			) {
@@ -86,7 +76,6 @@ fun UmWhateverThing(state: ExpandableItemsState, key: Any) {
 							else 0.dp, label = ""
 						)
 
-						Text(scaleFraction.toString())
 						Spacer(modifier = Modifier.height(animatedStatusbarPadding))
 
 						Box {
@@ -98,7 +87,7 @@ fun UmWhateverThing(state: ExpandableItemsState, key: Any) {
 										else
 											it.clickable { state.addToOverlayStack(sjjsj) }
 									}
-									.size((100 * scaleFraction).dp),
+									.size(100.dp),
 								key = sjjsj,
 								state = state
 							) {
@@ -126,7 +115,7 @@ fun UmWhateverThing(state: ExpandableItemsState, key: Any) {
 													else
 														it.clickable { state.addToOverlayStack(bruh) }
 												}
-												.size((50 * scaleFraction).dp),
+												.size(50.dp),
 											key = bruh,
 											state = state
 										) {

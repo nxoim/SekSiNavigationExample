@@ -25,7 +25,7 @@ data class ExpandableItemState(
 	val backGestureSwipeEdge: Int,
 	val backGestureOffset: Offset,
 	val offsetAnimationProgress: Float = 0f,
-	val scaleFraction: Float = 0f,
+	val scaleFraction: ScaleFraction = ScaleFraction(),
 	val sizeAgainstOriginalAnimationProgress: SizeAgainstOriginalAnimationProgress = SizeAgainstOriginalAnimationProgress(),
 )
 
@@ -35,10 +35,9 @@ data class SizeAgainstOriginalAnimationProgress(
 	val combinedProgress: Float = 0f
 )
 
-data class SizeAgainstScreenAnimationProgress(
-	val widthProgress: Float = 0f,
-	val heightProgress: Float = 0f,
-	val combinedProgress: Float = 0f
+data class ScaleFraction(
+	val byWidth: Float = 0f,
+	val byHeight: Float = 0f
 )
 
 class ExpandableItemsState(
@@ -59,6 +58,13 @@ class ExpandableItemsState(
 			Log.d(TAG, "Something is wrong. $keyAsString is already present in overlayStack.")
 		} else {
 			overlayStack.add(keyAsString)
+			itemsState.replace(
+				keyAsString,
+				itemsState[keyAsString]!!.copy(
+					backGestureProgress = 0f,
+					backGestureOffset = Offset.Zero,
+				)
+			)
 			Log.d(TAG, "Added $key to overlayStack")
 		}
 	}
@@ -71,9 +77,7 @@ class ExpandableItemsState(
 			lastOverlayId!!,
 			itemsState[lastOverlayId]!!.copy(
 				isExpanded = false,
-				isOverlaying = true,
-				backGestureProgress = 0f,
-				backGestureOffset = Offset.Zero,
+				isOverlaying = true
 			)
 		)
 		// the removal happens in the ExpandableItemLayout in a
@@ -131,7 +135,7 @@ class ExpandableItemsState(
 		)
 	}
 
-	fun setScaleFraction(key: String, newFraction: Float) {
+	fun setScaleFraction(key: String, newFraction: ScaleFraction) {
 		itemsState.replace(
 			key,
 			itemsState[key]!!.copy(scaleFraction = newFraction)
