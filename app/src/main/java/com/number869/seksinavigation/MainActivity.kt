@@ -36,7 +36,6 @@ class MainActivity : ComponentActivity() {
 			val state = rememberExpandableItemLayoutState()
 			SekSiNavigationTheme {
 				Surface {
-					// TODO fix overlay not blocking clicks behind it
 					ExpandableItemLayout(state, onBackInvokedDispatcher) {
 						Scaffold(
 							topBar = {
