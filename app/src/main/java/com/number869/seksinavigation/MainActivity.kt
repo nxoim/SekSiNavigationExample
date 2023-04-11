@@ -78,14 +78,7 @@ class MainActivity : ComponentActivity() {
 									repeat(100) {
 										item {
 											val key = it.toString()
-											// TODO SIZE
-											// in case your thing is fully dynamic - define preferred
-											// originalBounds by giving the wrapper a originalBounds (its a parameter),
-											// and giving the content fillMaxSize
-
-											// in case you are doing some sort of transition
-											// between 2 screens - give the sizes to the
-											// content itself
+				\
 											ExpandableWrapper(
 												Modifier
 													.height(64.dp)
