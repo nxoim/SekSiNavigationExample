@@ -3,6 +3,7 @@ package com.number869.seksinavigation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -23,6 +24,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.number869.seksinavigation.ui.theme.SekSiNavigationTheme
@@ -34,6 +36,7 @@ class MainActivity : ComponentActivity() {
 		super.onCreate(savedInstanceState)
 		setContent {
 			val state = rememberExpandableItemLayoutState()
+
 			SekSiNavigationTheme {
 				Surface {
 					ExpandableItemLayout(state, onBackInvokedDispatcher) {
@@ -44,30 +47,7 @@ class MainActivity : ComponentActivity() {
 									windowInsets = WindowInsets.statusBars
 								)
 							},
-							bottomBar = {
-								NavigationBar(windowInsets = WindowInsets.navigationBars) {
-									NavigationBarItem(
-										selected = true,
-										onClick = { /*TODO*/ },
-										icon = {
-											Icon(Icons.Default.Home, contentDescription = "")
-										},
-										label = {
-											Text(text = "Home")
-										}
-									)
-									NavigationBarItem(
-										selected = false,
-										onClick = { /*TODO*/ },
-										icon = {
-											Icon(Icons.Default.FavoriteBorder, contentDescription = "")
-										},
-										label = {
-											Text(text = "Favourites")
-										}
-									)
-								}
-							}
+							bottomBar = { BottomBar() }
 						) { scaffoldPadding ->
 							Surface(Modifier.padding(scaffoldPadding)) {
 								LazyColumn(
@@ -77,9 +57,10 @@ class MainActivity : ComponentActivity() {
 									repeat(100) {
 										item {
 											val key = it.toString()
-				\
+
 											ExpandableWrapper(
 												Modifier
+													.clickable { state.addToOverlayStack(key) }
 													.height(64.dp)
 													.fillMaxWidth(),
 												key = key,
@@ -96,5 +77,31 @@ class MainActivity : ComponentActivity() {
 				}
 			}
 		}
+	}
+}
+
+@Composable
+fun BottomBar() {
+	NavigationBar(windowInsets = WindowInsets.navigationBars) {
+		NavigationBarItem(
+			selected = true,
+			onClick = { /*TODO*/ },
+			icon = {
+				Icon(Icons.Default.Home, contentDescription = "")
+			},
+			label = {
+				Text(text = "Home")
+			}
+		)
+		NavigationBarItem(
+			selected = false,
+			onClick = { /*TODO*/ },
+			icon = {
+				Icon(Icons.Default.FavoriteBorder, contentDescription = "")
+			},
+			label = {
+				Text(text = "Favourites")
+			}
+		)
 	}
 }

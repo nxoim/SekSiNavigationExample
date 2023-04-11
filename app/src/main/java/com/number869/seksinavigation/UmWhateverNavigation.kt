@@ -43,12 +43,6 @@ fun UmWhateverExampleIdk(state: ExpandableItemsState, key: Any) {
 	Box(
 		Modifier
 			.fillMaxSize()
-			.let {
-				if (state.itemsState[key]?.isExpanded == true)
-					it
-				else
-					it.clickable { state.addToOverlayStack(key) }
-			}
 			.background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp))
 	) {
 		Column() {
