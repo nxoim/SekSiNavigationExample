@@ -35,11 +35,11 @@ class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContent {
-			val state = rememberExpandableItemLayoutState()
+			val state = rememberOverlayLayoutState()
 
 			SekSiNavigationTheme {
 				Surface {
-					ExpandableItemLayout(state, onBackInvokedDispatcher) {
+					OverlayLayout(state, this) {
 						Scaffold(
 							topBar = {
 								CenterAlignedTopAppBar(
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
 										item {
 											val key = it.toString()
 
-											ExpandableWrapper(
+											OverlayItemWrapper(
 												Modifier
 													.clickable { state.addToOverlayStack(key) }
 													.height(64.dp)

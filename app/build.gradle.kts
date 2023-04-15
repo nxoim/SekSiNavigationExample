@@ -9,8 +9,8 @@ android {
 
 	defaultConfig {
 		applicationId = "com.number869.seksinavigation"
-		minSdkPreview = "UpsideDownCake"
-		targetSdkPreview = "UpsideDownCake"
+		minSdk = 26
+		targetSdk = 33
 		versionCode = 1
 		versionName = "1.0"
 
@@ -66,5 +66,5 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-tooling:1.5.0-alpha02")
 	debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.0-alpha02")
 
-	implementation("com.github.Number869:SekSiNavigation:0.0.2")
+	implementation("com.github.Number869:SekSiNavigation:0.0.4.1")
 }

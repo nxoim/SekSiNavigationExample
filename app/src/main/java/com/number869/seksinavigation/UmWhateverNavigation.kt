@@ -36,7 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun UmWhateverExampleIdk(state: ExpandableItemsState, key: Any) {
+fun UmWhateverExampleIdk(state: OverlayLayoutState, key: Any) {
 	val isExpanded = state.itemsState[key]?.isExpanded ?: false
 	val animationProgress = state.itemsState[key]?.sizeAgainstOriginalAnimationProgress?.combinedProgress ?: 0f
 
@@ -94,7 +94,7 @@ fun UmWhateverExampleIdk(state: ExpandableItemsState, key: Any) {
 						val bruh = "$it 738" // yes
 
 						item {
-							ExpandableWrapper(
+							OverlayItemWrapper(
 								Modifier
 									.height(128.dp)
 									.fillMaxWidth()
