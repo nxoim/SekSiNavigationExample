@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.number869.seksinavigation.ui.theme.SekSiNavigationTheme
 
@@ -63,6 +64,7 @@ class MainActivity : ComponentActivity() {
 													.clickable { state.addToOverlayStack(key) }
 													.height(64.dp)
 													.fillMaxWidth(),
+												DpSize(400.dp, 500.dp),
 												key = key,
 												state = state
 											) {
