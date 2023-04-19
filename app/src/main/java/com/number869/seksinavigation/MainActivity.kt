@@ -65,6 +65,7 @@ class MainActivity : ComponentActivity() {
 													.height(64.dp)
 													.fillMaxWidth(),
 												DpSize(400.dp, 500.dp),
+												originalCornerRadius = 16.dp,
 												key = key,
 												state = state
 											) {

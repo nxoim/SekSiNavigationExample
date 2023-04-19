@@ -38,7 +38,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun UmWhateverExampleIdk(state: OverlayLayoutState, key: Any) {
 	val isExpanded = state.itemsState[key]?.isExpanded ?: false
-	val animationProgress = state.itemsState[key]?.sizeAgainstOriginalAnimationProgress?.combinedProgress ?: 0f
+	val itemState = state.itemsState[key.toString()] ?: state.emptyOverlayItemValues
+	val animationProgress = itemState.sizeAgainstOriginalAnimationProgress.combinedProgress
 
 	Box(
 		Modifier
@@ -71,7 +72,6 @@ fun UmWhateverExampleIdk(state: OverlayLayoutState, key: Any) {
 					Icon(
 						Icons.Default.Person,
 						contentDescription = "",
-						tint = MaterialTheme.colorScheme.onSecondaryContainer,
 						modifier = Modifier.size(24.dp)
 					)
 				}
@@ -79,7 +79,6 @@ fun UmWhateverExampleIdk(state: OverlayLayoutState, key: Any) {
 				Text(
 					text = "a what? bruh?",
 					style = MaterialTheme.typography.headlineSmall,
-					color = MaterialTheme.colorScheme.onSurface
 				)
 			}
 
