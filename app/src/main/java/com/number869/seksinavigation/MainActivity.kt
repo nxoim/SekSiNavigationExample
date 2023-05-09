@@ -3,15 +3,19 @@ package com.number869.seksinavigation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -19,13 +23,16 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.number869.seksinavigation.ui.theme.SekSiNavigationTheme
@@ -64,13 +71,28 @@ class MainActivity : ComponentActivity() {
 													.clickable { state.addToOverlayStack(key) }
 													.height(64.dp)
 													.fillMaxWidth(),
-												DpSize(400.dp, 500.dp),
+												originalContent = { UmWhateverExampleIdk(state, key)},
+												overlayContent = { UmWhateverExampleIdk(state, key) },
+												screenBehindContent = {
+													val backgroundAlpha = (1f - state.itemsState[key]?.gestureProgress!!* 0.5f)
+													Box(
+														Modifier
+															.background(Color.Black.copy(backgroundAlpha))
+															.fillMaxSize(),
+														contentAlignment = Alignment.TopCenter
+													) {
+														Text(
+															text = "Content Behind the overlay with customized background alpha",
+															style = MaterialTheme.typography.headlineLarge,
+															modifier = Modifier.statusBarsPadding()
+														)
+													}
+												},
+												overlaySize = DpSize(400.dp, 500.dp),
 												originalCornerRadius = 16.dp,
 												key = key,
 												state = state
-											) {
-												UmWhateverExampleIdk(state, key)
-											}
+											)
 										}
 									}
 								}

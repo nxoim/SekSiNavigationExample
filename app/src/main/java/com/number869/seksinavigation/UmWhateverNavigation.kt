@@ -2,6 +2,8 @@ package com.number869.seksinavigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +31,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,9 +41,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun UmWhateverExampleIdk(state: OverlayLayoutState, key: Any) {
-	val isExpanded = state.itemsState[key]?.isExpanded ?: false
+	val isExpanded by remember { derivedStateOf { state.getIsExpanded(key) }}
 	val itemState = state.itemsState[key.toString()] ?: state.emptyOverlayItemValues
-	val animationProgress = itemState.sizeAgainstOriginalAnimationProgress.combinedProgress
+	val animationProgress = itemState.animationProgress
 
 	Box(
 		Modifier
@@ -82,7 +86,7 @@ fun UmWhateverExampleIdk(state: OverlayLayoutState, key: Any) {
 				)
 			}
 
-			AnimatedVisibility(visible = isExpanded) {
+			AnimatedVisibility(visible = isExpanded, enter = fadeIn(), exit = fadeOut()) {
 				LazyVerticalGrid(
 					columns = GridCells.Fixed(2),
 					contentPadding = PaddingValues(16.dp),
