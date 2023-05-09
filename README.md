@@ -1,7 +1,11 @@
 # SekSiNavigation
 messy example of OnBackAnimationCallback usage with android 13/14's predictive gestures with jetpack compose
 
-https://user-images.githubusercontent.com/52751853/236983466-74fe41d7-f126-4e4a-acdc-9cce3f34b4f2.mp4
+
+
+https://github.com/Number869/SekSiNavigationExample/assets/52751853/1ed0be94-f7bf-49f7-be44-e844393c103f
+
+
 
 
 
