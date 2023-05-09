@@ -67,5 +67,5 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-tooling:1.5.0-alpha03")
 	debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.0-alpha03")
 
-	implementation("com.github.Number869:SekSiNavigation:0.0.9")
+	implementation("com.github.Number869:SekSiNavigation:0.0.10")
 }
