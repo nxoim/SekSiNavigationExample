@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.number869.seksinavigation.ui.theme.SekSiNavigationTheme
@@ -69,6 +70,25 @@ class MainActivity : ComponentActivity() {
 									verticalArrangement = Arrangement.spacedBy(8.dp)
 								) {
 									item {
+										val key = "search"
+										OverlayItemWrapper(
+											originalContent = {
+												SearchExample(state, key)
+											},
+											overlayContent = {
+												SearchExample(state, key)
+											},
+											originalModifier = Modifier
+												.height(64.dp)
+												.clickable { state.addToOverlayStack(key) },
+											originalCornerRadius = 160.dp,
+											key = "search",
+											state = state
+										)
+										Spacer(modifier = Modifier.height(16.dp))
+									}
+
+									item {
 										LazyRow(
 											Modifier.padding(bottom = 16.dp),
 											horizontalArrangement = spacedBy(16.dp)
@@ -76,15 +96,20 @@ class MainActivity : ComponentActivity() {
 											repeat(50) {
 												item {
 													val key = "$it story"
+													val screenWidth = LocalConfiguration.current.screenWidthDp
+													val size = DpSize(
+														screenWidth.dp,
+														(screenWidth * 1.7777778f).dp
+													)
 
 													OverlayItemWrapper(
 														Modifier
 															.clickable { state.addToOverlayStack(key) }
 															.fillMaxWidth(),
-														originalContent = { StoriesExample(state, key) },
-														overlayContent = { StoriesExample(state, key) },
+														originalContent = { StoriesExampleCollapsed(state, key) },
+														overlayContent = { StoriesExampleExpanded(state, key) },
 														screenBehindContent = {
-															val backgroundAlpha = (1f - state.itemsState[key]?.gestureProgress!!* 0.5f)
+															val backgroundAlpha = (1f - state.itemsState[key]?.gestureData?.progress!! * 0.5f)
 															Box(
 																Modifier
 																	.background(
@@ -121,7 +146,7 @@ class MainActivity : ComponentActivity() {
 																) {
 																	Column(horizontalAlignment = Alignment.CenterHorizontally) {
 																		Text(
-																			text = "Some ui above content",
+																			text = "Some ui above content.",
 																			style = MaterialTheme.typography.headlineLarge,
 																			modifier = Modifier.statusBarsPadding()
 																		)
@@ -133,6 +158,9 @@ class MainActivity : ComponentActivity() {
 																}
 															}
 														},
+														overlayParameters = OverlayParameters(
+															size = size
+														),
 														key = key,
 														state = state
 													)
@@ -152,7 +180,9 @@ class MainActivity : ComponentActivity() {
 													.fillMaxWidth(),
 												originalContent = { UmWhateverExampleIdk(state, key)},
 												overlayContent = { UmWhateverExampleIdk(state, key) },
-												overlaySize = DpSize(400.dp, 500.dp),
+												overlayParameters = OverlayParameters(
+													size = DpSize(400.dp, 500.dp)
+												) ,
 												originalCornerRadius = 16.dp,
 												key = key,
 												state = state
