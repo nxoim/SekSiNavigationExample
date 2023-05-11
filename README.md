@@ -3,7 +3,10 @@ messy example of OnBackAnimationCallback usage with android 13/14's predictive g
 
 
 
-https://github.com/Number869/SekSiNavigationExample/assets/52751853/1ed0be94-f7bf-49f7-be44-e844393c103f
+
+https://github.com/Number869/SekSiNavigationExample/assets/52751853/bb57f1d5-ad1b-49fe-a98b-ad1dee409cdc
+
+
 
 
 
