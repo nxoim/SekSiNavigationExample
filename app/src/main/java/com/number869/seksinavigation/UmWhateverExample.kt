@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun UmWhateverExampleIdk(state: OverlayLayoutState, key: Any) {
 	val isExpanded by remember { derivedStateOf { state.getIsExpanded(key) }}
-	val itemState = state.itemsState[key.toString()] ?: state.emptyOverlayItemValues
-	val animationProgress = itemState.animationProgress.combined
+	val itemState = state.itemsState[key.toString()]
+	val animationProgress = itemState?.animationProgress?.combined ?: 0f
 
 	Box(
 		Modifier
