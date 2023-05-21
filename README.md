@@ -4,7 +4,8 @@ messy example of OnBackAnimationCallback usage with android 13/14's predictive g
 
 
 
-https://github.com/Number869/SekSiNavigationExample/assets/52751853/bb57f1d5-ad1b-49fe-a98b-ad1dee409cdc
+https://github.com/Number869/SekSiNavigationExample/assets/52751853/84357c67-04af-44a2-8982-f40414dcf851
+
 
 
 
